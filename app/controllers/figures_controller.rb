@@ -48,7 +48,27 @@ class FiguresController < ApplicationController
 
 	get '/figures/:id/edit' do
 		@figure = Figure.find(params[:id])
+		@landmarks = Landmark.all
+		@titles = Title.all
 		erb :'figures/edit'
+	end
+
+	patch '/figures/:id' do
+		# binding.pry
+		@figure = Figure.find(params[:id])
+		# binding.pry
+		@figure.update(params["figure"])
+		if !params["landmark"]["name"].empty?
+    	@figure.landmarks << Landmark.create(name: params["landmark"]["name"])
+		else
+			@figure.landmark_ids=(params[:figure]["landmark_ids"])
+		end
+		if !params["title"]["name"].empty?
+			@figure.titles << Title.create(name: params["title"]["name"])
+		else
+			@figure.title_ids=(params[:figure]["title_ids"])
+		end
+		redirect "/figures/#{@figure.id}"
 	end
 
 
