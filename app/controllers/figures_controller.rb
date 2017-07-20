@@ -30,17 +30,25 @@ class FiguresController < ApplicationController
 		@figure = Figure.create(name: params[:figure][:name])
 		if !params["landmark"]["name"].empty?
 			@figure.landmarks << Landmark.create(name: params["landmark"]["name"])
+		else
+			#params[:figure]["landmark_ids"] gets a value from the checkboxes
+			#so if the checkboxes weren't filled out, the value will be nil
+			@figure.landmark_ids=(params[:figure]["landmark_ids"])
 		end
 		# will add in year_built form, and logic
 		if !params["title"]["name"].empty?
 			@figure.titles << Title.create(name: params["title"]["name"])
+		else
+			@figure.title_ids=(params[:figure]["title_ids"])
 		end
 		# binding.pry
 		@figure.save
-		@figure.title_ids=(params[:figure]["title_ids"])
-		@figure.landmark_ids=(params[:figure]["landmark_ids"])
-		binding.pry
 		redirect "/figures/#{@figure.id}"
+	end
+
+	get '/figures/:id/edit' do
+		@figure = Figure.find(params[:id])
+		erb :'figures/edit'
 	end
 
 
