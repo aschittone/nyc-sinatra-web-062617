@@ -11,5 +11,11 @@ class FiguresController < ApplicationController
 		erb :'figures/index'
 	end
 
+	get '/figures/new' do
+		@landmarks = Landmark.all
+		@titles = Title.all
+		erb :'figures/new'
+	end
+
 
 end
